@@ -4,9 +4,6 @@ const validator = require('validator');
 
 const patientSchema = mongoose.Schema(
   {
-    patientID: {
-      type: Number,
-    },
     fname: {
       type: String,
       required: [true, 'Enter a first name'],
@@ -14,6 +11,12 @@ const patientSchema = mongoose.Schema(
     lname: {
       type: String,
       required: [true, 'Enter a last name'],
+    },
+    mname: {
+      type: String,
+    },
+    sffx: {
+      type: String,
     },
     email: {
       type: String,
@@ -23,12 +26,6 @@ const patientSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Enter a password'],
-    },
-    role: {
-      type: String,
-    },
-    groupID: {
-      type: Number,
     },
   },
   {
@@ -52,7 +49,7 @@ patientSchema.statics.signup = async function (fname, lname, email, password) {
   const exists = await this.findOne({ email });
 
   if (exists) {
-    throw Error('Email already in use');
+    throw Error('Try using a different email');
   }
 
   const crystals = await bcrypt.genSalt(10);

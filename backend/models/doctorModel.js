@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 
-const patientSchema = mongoose.Schema(
+const doctorSchema = mongoose.Schema(
   {
-    patientID: {
+    doctorID: {
       type: Number,
     },
     fname: {
@@ -37,7 +37,7 @@ const patientSchema = mongoose.Schema(
 );
 
 // static signup method
-patientSchema.statics.signup = async function (fname, lname, email, password) {
+doctorSchema.statics.signup = async function (fname, lname, email, password) {
   // validation
   if (!email || !password) {
     throw Error('Fill in all fields');
@@ -58,33 +58,33 @@ patientSchema.statics.signup = async function (fname, lname, email, password) {
   const crystals = await bcrypt.genSalt(10);
   const hashish = await bcrypt.hash(password, crystals);
 
-  const patient = await this.create({ fname, lname, email, password: hashish });
+  const doctor = await this.create({ fname, lname, email, password: hashish });
 
-  return patient;
+  return doctor;
 };
 
 // static login method
-patientSchema.statics.login = async function (email, password) {
+doctorSchema.statics.login = async function (email, password) {
   // validation
   if (!email || !password) {
     throw Error('Fill in all fields');
   }
 
-  const patient = await this.findOne({ email });
+  const doctor = await this.findOne({ email });
 
-  if (!patient) {
+  if (!doctor) {
     throw Error('Invalid email/password');
   }
 
-  const match = await bcrypt.compare(password, patient.password);
+  const match = await bcrypt.compare(password, doctor.password);
 
   if (!match) {
     throw Error('Invalid email/password');
   }
 
-  return patient;
+  return doctor;
 };
 
-const Patient = mongoose.model('Patient', patientSchema);
+const Doctor = mongoose.model('Doctor', doctorSchema);
 
-module.exports = Patient;
+module.exports = Doctor;
