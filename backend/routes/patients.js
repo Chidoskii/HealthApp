@@ -33,6 +33,6 @@ router.post('/', createPatient);
 router.delete('/:id', deletePatient);
 
 // update a patient
-router.put('/:id', updatePatient);
+router.patch('/:id', updatePatient);
 
 module.exports = router;

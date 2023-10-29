@@ -33,6 +33,6 @@ router.post('/', createAdmin);
 router.delete('/:id', deleteAdmin);
 
 // update a admin
-router.put('/:id', updateAdmin);
+router.patch('/:id', updateAdmin);
 
 module.exports = router;
