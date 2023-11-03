@@ -61,6 +61,20 @@ const getOnePatient = async (req, res) => {
   }
 };
 
+// get a single patient by email
+const getPatient = async (req, res) => {
+  try {
+    console.log('In the right place');
+
+    const { email } = req.params;
+
+    const patients = await Patient.find({ email }).sort({ createdAt: -1 });
+    res.status(200).json(patients);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 // create a new patient
 const createPatient = async (req, res) => {
   try {
@@ -121,4 +135,5 @@ module.exports = {
   updatePatient,
   signupPatient,
   loginPatient,
+  getPatient,
 };

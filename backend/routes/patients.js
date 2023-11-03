@@ -7,6 +7,7 @@ const {
   updatePatient,
   loginPatient,
   signupPatient,
+  getPatient,
 } = require('../controllers/patientController');
 const cors = require('cors');
 
@@ -24,7 +25,10 @@ router.post('/signup', signupPatient);
 router.get('/', getAllPatients);
 
 // get a single patient
-router.get('/:id', getOnePatient);
+//router.get('/:id', getOnePatient);
+
+// get a patient from email
+router.get('/:email', getPatient);
 
 // create a new patient
 router.post('/', createPatient);
