@@ -64,8 +64,6 @@ const getOnePatient = async (req, res) => {
 // get a single patient by email
 const getPatient = async (req, res) => {
   try {
-    console.log('In the right place');
-
     const { email } = req.params;
 
     const patients = await Patient.find({ email }).sort({ createdAt: -1 });
