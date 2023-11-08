@@ -16,10 +16,10 @@ router.use(express.json());
 router.use(cors());
 
 // login route
-router.post('/login', loginPatient);
+router.post('/patient_login', loginPatient);
 
 // sign-up route
-router.post('/signup', signupPatient);
+router.post('/patient_signup', signupPatient);
 
 // get all of the patients
 router.get('/', getAllPatients);
