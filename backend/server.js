@@ -39,11 +39,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-/*
-app.get('/', (req, res) => {
+/*Welcome mssg (test)*/
+app.get('/welcome', (req, res) => {
   res.send('Hello my good friend!');
 });
-*/
 
 app.use('/patients', patientRoutes);
 app.use('/admins', adminRoutes);
