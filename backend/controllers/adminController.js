@@ -61,6 +61,18 @@ const getOneAdmin = async (req, res) => {
   }
 };
 
+// get a single admin by email
+const getAdmin = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const admins = await Admin.find({ email }).sort({ createdAt: -1 });
+    res.status(200).json(admins);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 // create a new admin
 const createAdmin = async (req, res) => {
   try {
@@ -121,4 +133,5 @@ module.exports = {
   updateAdmin,
   signupAdmin,
   loginAdmin,
+  getAdmin,
 };

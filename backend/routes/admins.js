@@ -7,6 +7,7 @@ const {
   updateAdmin,
   loginAdmin,
   signupAdmin,
+  getAdmin,
 } = require('../controllers/adminController');
 const cors = require('cors');
 
@@ -24,7 +25,10 @@ router.post('/admin_signup', signupAdmin);
 router.get('/', getAllAdmins);
 
 // get a single admin
-router.get('/:id', getOneAdmin);
+//router.get('/:id', getOneAdmin);
+
+// get a admin from email
+router.get('/:email', getAdmin);
 
 // create a new admin
 router.post('/', createAdmin);

@@ -3,6 +3,7 @@ const {
   createDoctor,
   getAllDoctors,
   getOneDoctor,
+  getDoctor,
   deleteDoctor,
   updateDoctor,
   loginDoctor,
@@ -24,7 +25,10 @@ router.post('/doctor_signup', signupDoctor);
 router.get('/', getAllDoctors);
 
 // get a single doctor
-router.get('/:id', getOneDoctor);
+//router.get('/:id', getOneDoctor);
+
+// get a admin from email
+router.get('/:email', getDoctor);
 
 // create a new doctor
 router.post('/', createDoctor);

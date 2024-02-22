@@ -61,6 +61,18 @@ const getOneDoctor = async (req, res) => {
   }
 };
 
+// get a single doctor by email
+const getDoctor = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const doctors = await Doctor.find({ email }).sort({ createdAt: -1 });
+    res.status(200).json(doctors);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 // create a new doctor
 const createDoctor = async (req, res) => {
   try {
@@ -121,4 +133,5 @@ module.exports = {
   updateDoctor,
   signupDoctor,
   loginDoctor,
+  getDoctor,
 };
