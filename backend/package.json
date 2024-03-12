@@ -1,5 +1,6 @@
 {
   "name": "backend",
+  "proxy": "http://localhost:4000",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -22,6 +23,7 @@
     "multer": "^1.4.4",
     "multer-gridfs-storage": "^5.0.2",
     "nodemon": "^3.0.3",
+    "stripe": "^14.20.0",
     "validator": "^13.11.0"
   }
 }
