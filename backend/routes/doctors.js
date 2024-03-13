@@ -8,6 +8,7 @@ const {
   updateDoctor,
   loginDoctor,
   signupDoctor,
+  showMyPatients,
 } = require('../controllers/doctorController');
 const cors = require('cors');
 
@@ -38,5 +39,8 @@ router.delete('/:id', deleteDoctor);
 
 // update a doctor
 router.patch('/:id', updateDoctor);
+
+// show patients
+router.get('/providers/:id', showMyPatients);
 
 module.exports = router;

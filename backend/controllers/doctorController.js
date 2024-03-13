@@ -1,5 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const Doctor = require('../models/doctorModel');
+const Provider = require('../models/providerModel');
+const Patient = require('../models/patientModel');
 const jwt = require('jsonwebtoken');
 
 const createToken = (_id) => {
@@ -125,6 +127,26 @@ const updateDoctor = async (req, res) => {
   }
 };
 
+// show patients
+const showMyPatients = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const patrons = [];
+
+  try {
+    const relations = await Provider.find(
+      { doctorID: id },
+      { patientID: 1 }
+    ).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(relations);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createDoctor,
   getAllDoctors,
@@ -134,4 +156,5 @@ module.exports = {
   signupDoctor,
   loginDoctor,
   getDoctor,
+  showMyPatients,
 };
