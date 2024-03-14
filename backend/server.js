@@ -6,6 +6,7 @@ const patientRoutes = require('./routes/patients.js');
 const adminRoutes = require('./routes/admins');
 const doctorRoutes = require('./routes/doctors');
 const recordModel = require('./models/recordModel.js');
+const notificationModel = require('./models/notificationModel.js');
 const Patient = require('./models/patientModel.js');
 const multer = require('multer');
 const path = require('path');
@@ -97,6 +98,29 @@ app.get('/records/:id', (req, res) => {
 
   recordModel
     .find({ patientID: id })
+    .then((records) => res.json(records))
+    .catch((err) => console.log(err));
+});
+
+app.post('/messenger', (req, res) => {
+  const { mtitle, ugroup, uemail, mcontent } = req.body;
+  notificationModel
+    .create({
+      sender: '65d696de8305820100ef32c4',
+      senderGroup: 'doctors',
+      title: mtitle,
+      receiverGroup: ugroup,
+      receiver: uemail,
+      message: mcontent,
+    })
+    .then((result) => res.json(result))
+    .catch((err) => console.log(err));
+});
+
+app.get('/get_notys/:email', (req, res) => {
+  const { email } = req.params;
+  notificationModel
+    .find({ receiver: email })
     .then((records) => res.json(records))
     .catch((err) => console.log(err));
 });

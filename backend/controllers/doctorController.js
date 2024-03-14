@@ -134,10 +134,7 @@ const showMyPatients = async (req, res) => {
   const patrons = [];
 
   try {
-    const relations = await Provider.find(
-      { doctorID: id },
-      { patientID: 1 }
-    ).sort({
+    const relations = await Provider.find({ doctorID: id }).sort({
       createdAt: -1,
     });
 

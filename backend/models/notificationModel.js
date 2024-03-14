@@ -11,10 +11,14 @@ const notificationSchema = mongoose.Schema(
       required: true,
     },
     receiver: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     receiverGroup: {
+      type: String,
+      required: true,
+    },
+    title: {
       type: String,
       required: true,
     },
