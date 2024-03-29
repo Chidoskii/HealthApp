@@ -66,10 +66,10 @@ const upload = multer({
 });
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  const { patientID } = req.body;
+  const { patientID, title } = req.body;
 
   recordModel
-    .create({ image: req.file.filename, patientID: patientID })
+    .create({ image: req.file.filename, patientID: patientID, title: title })
     .then((result) => res.json(result))
     .catch((err) => console.log(err));
 });
@@ -100,6 +100,27 @@ app.get('/records/:id', (req, res) => {
     .find({ patientID: id })
     .then((records) => res.json(records))
     .catch((err) => console.log(err));
+});
+
+// delete a record
+app.delete('/records/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such record' });
+  }
+  try {
+    const record = await recordModel.findByIdAndDelete(id);
+    if (!record) {
+      return res
+        .status(404)
+        .json({ message: `cannot find any records with ID ${id}` });
+    }
+    res.status(200).json({ message: `deleted the following ${record}` });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 app.post('/messenger', (req, res) => {

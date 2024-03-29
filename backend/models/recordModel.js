@@ -5,6 +5,10 @@ const recordSchema = mongoose.Schema(
     image: {
       type: String,
     },
+    title: {
+      type: String,
+      required: [true, 'Enter a title'],
+    },
     patientID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Patient',
