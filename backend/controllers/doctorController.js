@@ -131,7 +131,6 @@ const updateDoctor = async (req, res) => {
 const showMyPatients = async (req, res) => {
   const { id } = req.params;
   console.log(id);
-  const patrons = [];
 
   try {
     const relations = await Provider.find({ doctorID: id }).sort({

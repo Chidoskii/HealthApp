@@ -6,8 +6,11 @@ const patientRoutes = require('./routes/patients.js');
 const adminRoutes = require('./routes/admins');
 const doctorRoutes = require('./routes/doctors');
 const recordModel = require('./models/recordModel.js');
+const orgModel = require('./models/orgModel.js');
 const notificationModel = require('./models/notificationModel.js');
+const invoiceModel = require('./models/invoiceModel.js');
 const Patient = require('./models/patientModel.js');
+const Doctor = require('./models/doctorModel.js');
 const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -75,12 +78,13 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 app.post('/dupload', upload.single('file'), (req, res) => {
-  const { patientID, doctorID } = req.body;
+  const { patientID, doctorID, title } = req.body;
   recordModel
     .create({
       image: req.file.filename,
       patientID: patientID,
       doctorID: doctorID,
+      title: title,
     })
     .then((result) => res.json(result))
     .catch((err) => console.log(err));
@@ -123,6 +127,131 @@ app.delete('/records/:id', async (req, res) => {
   }
 });
 
+app.post('/invoice', (req, res) => {
+  const {
+    origin,
+    recipient,
+    dateSent,
+    dateDue,
+    subject,
+    message,
+    link,
+    createdBy,
+  } = req.body;
+  invoiceModel
+    .create({
+      createdBy: createdBy,
+      sender: origin,
+      receiver: recipient,
+      dateSent: dateSent,
+      dateDue: dateDue,
+      subject: subject,
+      message: message,
+      link: link,
+    })
+    .then((result) => res.json(result))
+    .catch((err) => console.log(err));
+});
+
+// Show invoices created by a user
+app.get('/invoices/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ createdBy: id })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show invoices
+app.get('/patient_invoices/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ receiver: id })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show unpaid invoices
+app.get('/patient_invoices/unpaid/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ receiver: id, paid: false })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show pending invoices
+app.get('/patient_invoices/pending/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ receiver: id, paid: true, paymentConfirmation: false })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show paid invoices
+app.get('/patient_invoices/paid/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ receiver: id, paid: true, paymentConfirmation: true })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show sent invoices
+app.get('/sent_invoices/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ createdBy: id })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show sent unpaid invoices
+app.get('/sent_invoices/unpaid/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ createdBy: id, paid: false })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show sent pending invoices
+app.get('/sent_invoices/pending/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ createdBy: id, paid: true, paymentConfirmation: false })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+
+// Show sent paid invoices
+app.get('/sent_invoices/paid/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .find({ createdBy: id, paid: true, paymentConfirmation: true })
+    .then((invoices) => res.json(invoices))
+    .catch((err) => console.log(err));
+});
+//////////////////////////////////////////////////////////////////////////////
+
+// Get Sender Info
+app.get('/patient_invoices/sender/:id', (req, res) => {
+  const { id } = req.params;
+  Doctor.find({ _id: id })
+    .then((info) => res.json(info))
+    .catch((err) => console.log(err));
+});
+
+// Mark Invoice as paid
+app.patch('/patient_invoices/:id', (req, res) => {
+  const { id } = req.params;
+  invoiceModel
+    .findByIdAndUpdate(id, { paid: true })
+    .then((invoice) => res.json(invoice))
+    .catch((err) => console.log(err));
+});
+
 app.post('/messenger', (req, res) => {
   const { mtitle, ugroup, uemail, mcontent } = req.body;
   notificationModel
@@ -143,6 +272,30 @@ app.get('/get_notys/:email', (req, res) => {
   notificationModel
     .find({ receiver: email })
     .then((records) => res.json(records))
+    .catch((err) => console.log(err));
+});
+
+app.get('/orgs/', (req, res) => {
+  orgModel
+    .find({})
+    .then((orgs) => res.json(orgs))
+    .catch((err) => console.log(err));
+});
+
+app.get('/orgs/:id', (req, res) => {
+  const { id } = req.params;
+
+  orgModel
+    .find({ _id: id })
+    .then((orgs) => res.json(orgs))
+    .catch((err) => console.log(err));
+});
+
+app.get('/orgs/patients/:id', (req, res) => {
+  const { id } = req.params;
+
+  Patient.find({ org: id })
+    .then((orgs) => res.json(orgs))
     .catch((err) => console.log(err));
 });
 

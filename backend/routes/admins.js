@@ -8,6 +8,7 @@ const {
   loginAdmin,
   signupAdmin,
   getAdmin,
+  showMyColleagues,
 } = require('../controllers/adminController');
 const cors = require('cors');
 
@@ -38,5 +39,8 @@ router.delete('/:id', deleteAdmin);
 
 // update a admin
 router.patch('/:id', updateAdmin);
+
+// show patients
+router.get('/colleagues/:id', showMyColleagues);
 
 module.exports = router;

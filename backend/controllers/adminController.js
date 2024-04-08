@@ -1,5 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const Admin = require('../models/adminModel');
+const Colleague = require('../models/colleagueModel');
 const jwt = require('jsonwebtoken');
 
 const createToken = (_id) => {
@@ -125,6 +126,22 @@ const updateAdmin = async (req, res) => {
   }
 };
 
+// show patients
+const showMyColleagues = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const relations = await Colleague.find({ adminID: id }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(relations);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createAdmin,
   getAllAdmins,
@@ -134,4 +151,5 @@ module.exports = {
   signupAdmin,
   loginAdmin,
   getAdmin,
+  showMyColleagues,
 };
